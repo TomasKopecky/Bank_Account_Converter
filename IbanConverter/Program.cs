@@ -174,6 +174,7 @@
             Console.WriteLine("d) V případě, že nějaký řádek ze vstupních TXT souborů není rozpoznán jako bankovní účet CZ nebo SK, do výstupního souboru se vloží tento originální text a za něj se zapíše 'NEROZPOZNÁNO'");
             Console.WriteLine("e) Výstupní soubor 'output.txt' je ve formátu TXT, nicméně strukturován je jako CSV s oddělovačem ';'. Při každém spuštění funkce '1 - spustit převod' se výstupní soubor 'output.txt' vytvoří kompletně znovu (nedoplňuje se)");
             Console.WriteLine("f) V případě nalezení duplicitních účtů ve vstupních souborech jsou zachovány pouze jedinečné hodnoty (duplicity se mažou)");
+            Console.WriteLine($"g) Maximální velikost vstupního souboru (jednotlivých) je {MAX_INPUT_FILE_SIZE} a maximální počet zpracovávaných vstupních souborů je {MAX_INPUT_FILE_COUNT}");
         }
     }
 }
