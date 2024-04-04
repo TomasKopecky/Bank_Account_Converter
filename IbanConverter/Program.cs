@@ -42,7 +42,7 @@
 
         private void InitializeMenu()
         {
-            _menuList.Add("-------------------------------------------------BANK_ACCOUNT_CONVERTER--------------------------------------------------");
+            _menuList.Add("------------------------------------------------BANK_ACCOUNT_CONVERTER------------------------------------------------");
             _menuList.Add("0: Konec programu");
             _menuList.Add("1: Spustit převod");
             _menuList.Add("2: Nápověda + o programu");
