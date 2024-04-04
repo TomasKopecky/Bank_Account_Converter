@@ -5,6 +5,8 @@
         private readonly string _filePath;
         private readonly List<string> _menuList = new List<string>();
         private readonly List<string> _errors = new List<string>();
+        private const int MAX_INPUT_FILE_SIZE = 1024;
+        private const int MAX_INPUT_FILE_COUNT = 100;
 
         public Program()
         {
@@ -14,7 +16,7 @@
 
         public static void Main()
         {
-            var program = new Program();
+            Program program = new Program();
             program.Run();
         }
 
@@ -81,10 +83,10 @@
 
         private void ProcessBankAccounts()
         {
-            var inputAccountsList = ProcessInputFile();
+            List<string>? inputAccountsList = ProcessInputFile();
             if (inputAccountsList == null || !inputAccountsList.Any()) return;
 
-            var outputAccountsList = ProcessInputBankAccounts(inputAccountsList);
+            List<string> outputAccountsList = ProcessInputBankAccounts(inputAccountsList);
             if (outputAccountsList.Any())
             {
                 SaveOutputFile(outputAccountsList);
@@ -100,8 +102,20 @@
                     .Where(file => !file.Contains("output"))
                     .ToList();
 
-                foreach (var file in filesList)
+                if (filesList.Count > MAX_INPUT_FILE_COUNT)
                 {
+                    _errors.Add($"Zpracování nebude provedeno, překročili jste maximální počet vstupních TXT souborů {MAX_INPUT_FILE_COUNT}");
+                    return null;
+                }
+
+                foreach (string file in filesList)
+                {
+                    FileInfo fileInfo = new FileInfo(file);
+                    if (fileInfo.Length > MAX_INPUT_FILE_SIZE)
+                    {
+                        _errors.Add($"Zpracování nebude provedeno, u souboru {file} překročili jste maximální možnou velikost vstupního TXT souboru {MAX_INPUT_FILE_SIZE} bajtů");
+                        return null;
+                    }
                     inputAccountsList.AddRange(File.ReadAllLines(file));
                 }
 
@@ -122,13 +136,13 @@
 
         private List<string> ProcessInputBankAccounts(List<string> inputAccountsList)
         {
-            var outputAccountsList = new List<string>();
+            List<string> outputAccountsList = new List<string>();
 
-            foreach (var inputBankAccount in inputAccountsList.Where(account => !string.IsNullOrWhiteSpace(account)))
+            foreach (string? inputBankAccount in inputAccountsList.Where(account => !string.IsNullOrWhiteSpace(account)))
             {
-                var bankAccount = new BankAccount(inputBankAccount);
-                var accountDetails = $"{bankAccount.StandardFormatAccountNumber};{bankAccount.ExtendedFormatAccountNumber};{bankAccount.IbanFormatAccountNumber}";
-                outputAccountsList.Add(string.IsNullOrWhiteSpace(accountDetails) ? $"{inputBankAccount};NEROZPOZNÁNO" : accountDetails);
+                BankAccount bankAccount = new BankAccount(inputBankAccount);
+                string accountDetails = $"{bankAccount.StandardFormatAccountNumber};{bankAccount.ExtendedFormatAccountNumber};{bankAccount.IbanFormatAccountNumber}";
+                outputAccountsList.Add(string.IsNullOrWhiteSpace(bankAccount.StandardFormatAccountNumber) || string.IsNullOrWhiteSpace(bankAccount.ExtendedFormatAccountNumber) || string.IsNullOrWhiteSpace(bankAccount.IbanFormatAccountNumber) ? $"{inputBankAccount};NEROZPOZNÁNO;NEROZPOZNÁNO" : accountDetails);
             }
 
             return outputAccountsList;
