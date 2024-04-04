@@ -5,17 +5,14 @@ namespace TestProject
     [TestClass]
     public class UnitTest1
     {
-        private List<string> _inputStrings;
-        private List<string> _outputStrings;
+        private List<string> _inputStrings = new List<string>();
+        private List<string> _outputStrings = new List<string>();
 
-        private string inputFilesDirectory = "inputFiles";
+        //private string inputFilesDirectory = "inputFiles";
 
         [TestInitialize]
         public void InitializeTests()
         {
-            _inputStrings = new List<string>();
-            _outputStrings = new List<string>();
-
             // the input strings list
             _inputStrings.Add("246000/5500");
             _inputStrings.Add("CZ0655000000000000246000");
