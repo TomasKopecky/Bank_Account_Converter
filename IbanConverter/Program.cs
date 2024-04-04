@@ -5,7 +5,7 @@
         private readonly string _filePath;
         private readonly List<string> _menuList = new List<string>();
         private readonly List<string> _errors = new List<string>();
-        private const int MAX_INPUT_FILE_SIZE = 1024;
+        private const int MAX_INPUT_FILE_SIZE = 1024000;
         private const int MAX_INPUT_FILE_COUNT = 100;
 
         public Program()
